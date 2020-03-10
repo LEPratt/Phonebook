@@ -18,7 +18,7 @@ public class PhoneBookApplication
 		public static void menu(Person[] phoneBook) 
 		{	
 			// Prompt user for menu input
-			Scanner menuChoice = new Scanner(System.in);
+			//Scanner menuChoice = new Scanner(System.in);
 			System.out.println("\nEnter 1 to add a new phonebook entry"
 					+ "\nEnter 2 to delete a phonebook entry associated with a phone number"
 					+ "\nEnter 3 to update the phone number of an entry"
@@ -29,7 +29,9 @@ public class PhoneBookApplication
 					+ "\nEnter 8 to print all of the entries in the phonebook in alphebetical order by full name"
 					+ "\nEnter 9 to EXIT");
 					System.out.print("\n\nEnter your choice here(1-9):");
-				// Check to see if the user entered a number
+					
+					
+				/* Check to see if the user entered a number
 				while (!menuChoice.hasNextInt())
 				{
 					// Prompt the user to enter a valid menu choice
@@ -37,8 +39,10 @@ public class PhoneBookApplication
 				    // Get another choice from the user
 				    menuChoice.next();
 				}
+				*/
+				int choice = validateChoice();					
 				
-				int choice = menuChoice.nextInt();
+				
 			//  Execute menu choice 
 	        switch (choice) 
 	        {
@@ -111,7 +115,31 @@ public class PhoneBookApplication
                 	break; 
 	        }
 		}
+// Method to validate menu choice
+		public static int validateChoice()	
+		{				
+			//Assign variables		
+			int choice = 0;
+			
+			//Open a scanner and prompt user for input
+			Scanner input = new Scanner(System.in);		
+			String inputValue=input.next();
+			//Check to see if input can be converted into an int and assign the value to age
+			try
+			{
+			return Integer.parseInt(inputValue);
+			}
+			//Catch exception if string can not be converted into an integer and prompt to try again
+			catch(NumberFormatException ex) 
+			{
+				System.out.println(inputValue+" is not a number between 1 and 9");
+				System.out.println("Please try again!!");
+				return validateChoice();
+			}
 		
+			
+		}
+
 // Method to get new person info 		
 				public static Person addPerson() 
 				{
@@ -135,10 +163,8 @@ public class PhoneBookApplication
 					String zip = data[4];
 					String phoneNumber = data[5];
 					Address address = new Address(street, city, state, zip);
-					Person add = new Person(name, address, phoneNumber);			
-										
-					System.out.println("\nNew entry added to phonebook!\n");
-					
+					Person add = new Person(name, address, phoneNumber);										
+					System.out.println("\nNew entry added to phonebook!\n");					
 					return add;
 				}
 				
@@ -160,7 +186,7 @@ public class PhoneBookApplication
 		{
 			// Assign variables
 			int index = source.length+1;
-			if (source.length>0) 
+			if (source.length != 0) 
 			{
 				Person[] temp = new Person [source.length-1];
 			
@@ -176,9 +202,9 @@ public class PhoneBookApplication
 					if (remove.equals(source[i].getPhoneNumber())) 
 					{					
 						index = i;
-					}			
-					// Remove the entry if it does exist 
-			
+					}		
+					
+					// Remove the entry if it does exist 			
 					// All entries before the entry to be removed
 					if (i<index & i<=temp.length-1) 
 					{						
@@ -217,7 +243,7 @@ public class PhoneBookApplication
 		{
 			// Assign variables
 			int index=source.length+1;
-			if (source.length>0) 
+			if (source.length != 0) 
 			{
 				// Get phone number of the entry to remove from the user
 				System.out.println("\n"+"Changing the phone number in an entry:");            		
@@ -263,7 +289,7 @@ public class PhoneBookApplication
 			}
 			else // Inform the user if there were no results that match their search				
 			{
-				System.out.println("\n"+"There are no enteries that match your search!");
+				System.out.println("\nThere are no enteries that match your search!");
 			}
 		}
 		
@@ -273,7 +299,7 @@ public class PhoneBookApplication
     		// Assign variables
 			Person[] results = new Person[0];
 			// prompt the user for input
-			System.out.println("\n"+"Searching by phone number:");            		
+			System.out.println("\nSearching by phone number:");            		
     		System.out.print("Please enter the phone number you would like to search for:");
     		Scanner num = new Scanner(System.in);
 			String phNumber = num.nextLine();
@@ -295,7 +321,7 @@ public class PhoneBookApplication
     		// Assign variables
 			Person[] results = new Person[0];
 			// prompt the user for input
-		    System.out.println("\n"+"Searching by first name:");            		
+		    System.out.println("\nSearching by first name:");            		
 		    System.out.print("Please enter the first name you would like to search for:");
 		    Scanner inputF = new Scanner(System.in);
 			String fName = inputF.nextLine();
@@ -317,7 +343,7 @@ public class PhoneBookApplication
     		// Assign variables
 			Person[] results = new Person[0];
 			// prompt the user for input
-			System.out.println("\n"+"Searching by last name:");            		
+			System.out.println("\nSearching by last name:");            		
 			System.out.print("Please enter the last name you would like to search for:");
 			Scanner inputL = new Scanner(System.in);
 			String lName = inputL.nextLine();
@@ -337,7 +363,7 @@ public class PhoneBookApplication
     		// Assign variables
 			Person[] results = new Person[0];
 			// prompt the user for input
-			System.out.println("\n"+"Searching by full name:");            		
+			System.out.println("\nSearching by full name:");            		
 			System.out.print("Please enter the full name you would like to search for:");
 			Scanner inputN = new Scanner(System.in);
 			String Name = inputN.nextLine();
