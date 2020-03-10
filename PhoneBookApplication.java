@@ -18,7 +18,6 @@ public class PhoneBookApplication
 		public static void menu(Person[] phoneBook) 
 		{	
 			// Prompt user for menu input
-			//Scanner menuChoice = new Scanner(System.in);
 			System.out.println("\nEnter 1 to add a new phonebook entry"
 					+ "\nEnter 2 to delete a phonebook entry associated with a phone number"
 					+ "\nEnter 3 to update the phone number of an entry"
@@ -31,17 +30,8 @@ public class PhoneBookApplication
 					System.out.print("\n\nEnter your choice here(1-9):");
 					
 					
-				/* Check to see if the user entered a number
-				while (!menuChoice.hasNextInt())
-				{
-					// Prompt the user to enter a valid menu choice
-				    System.out.print("\n\nInvalid input\nEnter a number between 1 and 9");
-				    // Get another choice from the user
-				    menuChoice.next();
-				}
-				*/
+				// Check to see if the user entered a number and pass that number to the menu				
 				int choice = validateChoice();					
-				
 				
 			//  Execute menu choice 
 	        switch (choice) 
