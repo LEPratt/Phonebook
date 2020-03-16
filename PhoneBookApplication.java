@@ -182,12 +182,15 @@ public class PhoneBookApplication
 //Method to write changes to ponebook
 		public static void updatePhonebook(Person[] source) {
 			
+			final String path = "C:\\Users\\lsmlp\\Documents\\Java\\Streams\\";
+			String fileName = path+"phoneBook.txt";
+			
 			// Check if there are entries that match the search to print
 				if (source.length != 0) 
 				{
 					try 
 					{	 
-				    FileWriter fileWriter = new FileWriter("C:\\Users\\lsmlp\\Documents\\Java\\Streams\\phoneBook.txt");
+				    FileWriter fileWriter = new FileWriter(fileName);
 				    PrintWriter printWriter = new PrintWriter(fileWriter);
 				    
 				    // Write updated phonebook to the file
