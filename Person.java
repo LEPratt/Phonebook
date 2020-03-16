@@ -1,7 +1,7 @@
 package phoneBook;
 
 
-public class Person extends Address
+public class Person
 {
 	// Assign instance variables
 		private String name;
@@ -60,9 +60,11 @@ public class Person extends Address
 		@Override
 		public String toString() 
 		{
-			return ("Name: " + name + ", Phone Number: " + phoneNumber.replaceFirst("(\\d{3})(\\d{3})(\\d+)", "($1)$2-$3") + ", "+address);
+			return name + ", "+address+", "+phoneNumber;
 		}	
 		
-		
+		public String displayPerson() {
+			return "Name: " + name + ", Phone Number: " + phoneNumber.replaceFirst("(\\d{3})(\\d{3})(\\d+)", "($1)$2-$3") + ", "+address.displayAddress();
+		}
 		
 }

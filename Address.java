@@ -67,9 +67,12 @@ public class Address
 
 		@Override
 		public String toString() {
-			return "Address: " + street + ", " + city + ", " + state + ", " + zip;
+			return street + ", " + city + ", " + state + ", " + zip;
 		}
 		
+		public String displayAddress() {
+			return "Address: "+ street + ", " + city + ", " + state + ", " + zip;
+		}
 		
 		
 }

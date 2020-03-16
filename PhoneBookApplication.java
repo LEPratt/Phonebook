@@ -1,6 +1,13 @@
 package phoneBook;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Scanner;
+
 
 public class PhoneBookApplication 
 {
@@ -10,6 +17,10 @@ public class PhoneBookApplication
 		// Assign variables
 		Person [] phoneBook = new Person[0];
 		
+		//Load initial phonebook
+		phoneBook = reloadPhonebook();
+		
+		//Start menu
 		menu(phoneBook);
 		
 	// End main	
@@ -94,6 +105,7 @@ public class PhoneBookApplication
                      
 	            case 9: ;
 	            	// Thank the user and exit the program
+	            	updatePhonebook(phoneBook);
         			System.out.println("\nThank you for using my phone book!");
         			break;
         			
@@ -105,6 +117,7 @@ public class PhoneBookApplication
                 	break; 
 	        }
 		}
+		
 // Method to validate menu choice
 		public static int validateChoice()	
 		{				
@@ -124,39 +137,110 @@ public class PhoneBookApplication
 			{
 				System.out.println(inputValue+" is not a number between 1 and 9");
 				System.out.println("Please try again!!");
-				return validateChoice();
-			}
-		
-			
+				return validateChoice();				
+			}			
 		}
-
-// Method to get new person info 		
-				public static Person addPerson() 
+		
+//Method to reload the last phonebook content from file
+		public static Person[] reloadPhonebook() 
+		{
+			//Assign variables
+			final String path = "C:\\Users\\lsmlp\\Documents\\Java\\Streams\\";
+			String fileName = path+"phoneBook.txt";
+			Person[] temp = new Person[0];
+			//Catch exceptions
+			try 
+			{	
+				//Read from the file
+				Scanner inputEntry = new Scanner(new File(fileName));
+					while (inputEntry.hasNextLine()) 
+					{
+						String info = inputEntry.nextLine();
+						
+						// Create a string array by separating the string by the pattern ", "
+						String[] data = info.split(", ");
+						
+						// Assign each element to the corresponding data entry for the new phonebook entry
+						String name = data[0];
+						String street = data[1];
+						String city = data[2];
+						String state = data[3];
+						String zip = data[4];
+						String phoneNumber = data[5];
+						Address address = new Address(street, city, state, zip);
+						Person add = new Person(name, address, phoneNumber);										
+						temp = expandArray(temp, add);
+					}					
+			}
+			catch(FileNotFoundException e) 
+			{
+				System.out.println("Error reading from file");
+			}
+			return temp;
+		}
+		
+//Method to write changes to ponebook
+		public static void updatePhonebook(Person[] source) {
+			
+			// Check if there are entries that match the search to print
+				if (source.length != 0) 
 				{
-					// Prompt the user for input
-					System.out.println("\n"+"Creating a new entry:"+"\n");		        	
-					System.out.println("Please enter the information in the following format:");
-					System.out.println("name, street, city, state, zip code, phone number");
-					System.out.println("Example: John Doe, 114 Market St, St Louis, MO, 63403, 6366435698");
-					// Get all input from user as a single string 
-					Scanner inputEntry = new Scanner(System.in);
-					String info = inputEntry.nextLine();
+					try 
+					{	 
+				    FileWriter fileWriter = new FileWriter("C:\\Users\\lsmlp\\Documents\\Java\\Streams\\phoneBook.txt");
+				    PrintWriter printWriter = new PrintWriter(fileWriter);
+				    
+				    // Write updated phonebook to the file
+					for(Person person: source) 
+					{
+						
+						printWriter.println(person);
+				    }
+				    printWriter.close();
+				    }
+				    catch(FileNotFoundException e) 
+					{
+						System.out.println("Error writing to file");
+					} catch (IOException e) {
+						System.out.println("Error writing to file");
+					}
+				 
+				}	
 					
-					// Create a string array by separating the string by the pattern ", "
-					String[] data = info.split(", ");
-					
-					// Assign each element to the corresponding data entry for the new phonebook entry
-					String name = data[0];
-					String street = data[1];
-					String city = data[2];
-					String state = data[3];
-					String zip = data[4];
-					String phoneNumber = data[5];
-					Address address = new Address(street, city, state, zip);
-					Person add = new Person(name, address, phoneNumber);										
-					System.out.println("\nNew entry added to phonebook!\n");					
-					return add;
+				else // Inform the user there are no entries in the phonebook				
+				{
+					System.out.println("\nThere are currently no enteries in your phonebook!  Database will not be updated.");
 				}
+					
+		}
+		
+// Method to get new person info 		
+		public static Person addPerson() 
+		{
+			// Prompt the user for input
+			System.out.println("\n"+"Creating a new entry:"+"\n");		        	
+			System.out.println("Please enter the information in the following format:");
+			System.out.println("name, street, city, state, zip code, phone number");
+			System.out.println("Example: John Doe, 114 Market St, St Louis, MO, 63403, 6366435698");
+			// Get all input from user as a single string 
+			Scanner inputEntry = new Scanner(System.in);
+			String info = inputEntry.nextLine();
+			
+			// Create a string array by separating the string by the pattern ", "
+			String[] data = info.split(", ");
+			
+			// Assign each element to the corresponding data entry for the new phonebook entry
+			String name = data[0];
+			String street = data[1];
+			String city = data[2];
+			String state = data[3];
+			String zip = data[4];
+			String phoneNumber = data[5];
+			Address address = new Address(street, city, state, zip);
+			Person add = new Person(name, address, phoneNumber);										
+			System.out.println("\nNew entry added to phonebook!\n");					
+			return add;
+		}
 				
 // Method to expand a Person array
 		public static Person[] expandArray(Person[] source, Person add)
@@ -168,6 +252,7 @@ public class PhoneBookApplication
 				temp[i] = x;
 			}
 					temp[temp.length-1]=add;
+					updatePhonebook(temp);
 			return temp;			
 		}
 		
@@ -216,7 +301,8 @@ public class PhoneBookApplication
 						// Return the new phonebook with the entry removed
 						else 
 						{
-							System.out.println("The entry associated with "+remove+" has been removed.");			
+							System.out.println("The entry associated with "+remove+" has been removed.");
+							updatePhonebook(temp);
 							return temp;
 						}
 			}
@@ -250,7 +336,8 @@ public class PhoneBookApplication
 					{
 						source[i].setPhoneNumber(newN);
 						index=i;
-						System.out.println("The Number has been updated.");				
+						updatePhonebook(source);
+						System.out.println("The Number has been updated.");	
 					}
 				}
 				// Inform the user if there is no entry matching their request
@@ -274,7 +361,7 @@ public class PhoneBookApplication
 				System.out.println("The results of your search are:"+"\n");
 				for(Person person: results) 
 				{					
-						System.out.println(person);						
+						System.out.println(person.displayPerson());						
 				}
 			}
 			else // Inform the user if there were no results that match their search				
@@ -367,9 +454,12 @@ public class PhoneBookApplication
 			}
 			return results;		
 		}
-// Method to print results of searches	
+// Method to print the phonebook alphebetically by first name	
 		public static void printPhoneBook(Person[] phoneBook) 
 		{	
+			 // Check to see if there are any entries in the phonebook and print them
+			if (phoneBook.length != 0) 
+			{
 			// Assign variables
 			Person temp;
 			// Sort the entries alphabetically by full name
@@ -385,13 +475,11 @@ public class PhoneBookApplication
 	                }
 	            }
 	        }
-	        // Check to see if there are any entries in the phonebook and print them
-			if (phoneBook.length != 0) 
-			{
+	            updatePhonebook(phoneBook);
 				System.out.println("The phonebook contains the following entries:"+"\n");
 				for(Person person: phoneBook) 
 				{					
-						System.out.println(person);						
+						System.out.println(person.displayPerson());						
 				}
 			}
 				else // Inform the user there are no entries in the phonebook
